@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard - LibreShelf</title>
+
+    <link href="../src/output.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Essential Scripts -->
+    <script type="module" src="../js/api.js"></script>
+    <script src="../js/theme.js"></script>
+  </head>
+  <body
+    class="bg-gray-50 dark:bg-slate-900 font-sans text-text-black dark:text-gray-100 transition-colors duration-300"
+  >
+    <div id="navbar-container"></div>
+
+    <main
+      class="max-w-[1440px] mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col md:flex-row gap-8"
+    >
+      <!-- SIDEBAR MENU -->
+      <aside class="w-full md:w-72 flex-shrink-0">
+        <div
+          class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-700 p-6 sticky top-28"
+        >
+          <!-- User Mini Profile & Avatar Upload -->
+          <div class="text-center mb-8 relative">
+            <!-- Avatar Container -->
+            <div
+              class="relative w-28 h-28 mx-auto rounded-full overflow-hidden border-4 border-white dark:border-slate-700 shadow-lg cursor-pointer group"
+              onclick="document.getElementById('avatar-input').click()"
+            >
+              <!-- Current Image -->
+              <img
+                id="sidebar-avatar"
+                src="https://placehold.co/100"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+
+              <!-- Hover Overlay (Camera Icon) -->
+              <div
+                class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <i class="ph-bold ph-camera text-white text-3xl"></i>
+              </div>
+            </div>
+
+            <!-- Hidden File Input -->
+            <input
+              type="file"
+              id="avatar-input"
+              accept="image/*"
+              class="hidden"
+            />
+
+            <!-- Text Info -->
+            <div class="mt-4">
+              <h3
+                id="sidebar-name"
+                class="font-bold text-xl text-primary dark:text-white"
+              >
+                Loading...
+              </h3>
+              <p
+                id="sidebar-role"
+                class="text-xs text-gray-500 uppercase tracking-wider font-bold mt-1"
+              >
+                Student
+              </p>
+            </div>
+          </div>
+
+          <!-- Menu Links -->
+          <nav class="space-y-2">
+            <button
+              onclick="switchTab('profile')"
+              id="tab-btn-profile"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors bg-primary text-white shadow-md"
+            >
+              <i class="ph-bold ph-user text-lg"></i> My Profile
+            </button>
+            <button
+              onclick="switchTab('books')"
+              id="tab-btn-books"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+            >
+              <i class="ph-bold ph-books text-lg"></i> My Uploads
+            </button>
+            <button
+              onclick="switchTab('favorites')"
+              id="tab-btn-favorites"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+            >
+              <i class="ph-bold ph-heart text-lg"></i> Favorites
+            </button>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT AREA -->
+      <div class="flex-1">
+        <!-- TAB 1: PROFILE SETTINGS -->
+        <section id="tab-profile" class="space-y-6 animate-fade-in">
+          <div
+            class="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-slate-700"
+          >
+            <h2 class="text-2xl font-bold text-primary dark:text-white mb-6">
+              Profile Settings
+            </h2>
+
+            <form id="profile-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Full Name -->
+                <div>
+                  <label
+                    class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2"
+                    >Full Name</label
+                  >
+                  <input
+                    type="text"
+                    id="input-fullname"
+                    class="w-full p-3 rounded-lg border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 focus:ring-2 focus:ring-accent outline-none"
+                  />
+                </div>
+                <!-- Email (Read Only) -->
+                <div>
+                  <label
+                    class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    id="input-email"
+                    disabled
+                    class="w-full p-3 rounded-lg border border-gray-300 dark:border-slate-600 bg-gray-100 dark:bg-slate-800 text-gray-500 cursor-not-allowed"
+                  />
+                </div>
+                <!-- Phone -->
+                <div>
+                  <label
+                    class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2"
+                    >Phone Number</label
+                  >
+                  <input
+                    type="text"
+                    id="input-phone"
+                    class="w-full p-3 rounded-lg border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 focus:ring-2 focus:ring-accent outline-none"
+                  />
+                </div>
+                <!-- Gender -->
+                <div>
+                  <label
+                    class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2"
+                    >Gender</label
+                  >
+                  <select
+                    id="input-gender"
+                    class="w-full p-3 rounded-lg border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 focus:ring-2 focus:ring-accent outline-none"
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Bio -->
+              <div>
+                <label
+                  class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2"
+                  >Bio</label
+                >
+                <textarea
+                  id="input-bio"
+                  rows="4"
+                  class="w-full p-3 rounded-lg border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 focus:ring-2 focus:ring-accent outline-none resize-none"
+                ></textarea>
+              </div>
+
+              <!-- Submit -->
+              <div class="flex justify-end">
+                <button
+                  type="submit"
+                  class="bg-primary hover:bg-secondary text-white font-bold py-3 px-8 rounded-lg shadow-md transition-all flex items-center gap-2"
+                >
+                  <i class="ph-bold ph-floppy-disk"></i> Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- TAB 2: MY BOOKS (Teacher Only) -->
+        <section id="tab-books" class="hidden space-y-6 animate-fade-in">
+          <div
+            class="flex justify-between items-center bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm"
+          >
+            <div>
+              <h2 class="text-2xl font-bold text-primary dark:text-white">
+                My Uploaded Books
+              </h2>
+              <p class="text-gray-500 text-sm">
+                Manage the books you have shared.
+              </p>
+            </div>
+            <!-- Upload Button -->
+            <a
+              href="upload.html"
+              class="bg-accent hover:bg-yellow-400 text-primary font-bold py-2 px-6 rounded-lg shadow-sm flex items-center gap-2 transition"
+            >
+              <i class="ph-bold ph-plus"></i> Upload New
+            </a>
+          </div>
+
+          <!-- Books Grid -->
+          <div
+            id="my-books-grid"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6"
+          >
+            <!-- Books injected by JS -->
+          </div>
+        </section>
+
+        <!-- TAB 3: FAVORITES -->
+        <section id="tab-favorites" class="hidden space-y-6 animate-fade-in">
+          <div
+            class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm"
+          >
+            <h2 class="text-2xl font-bold text-primary dark:text-white">
+              My Favorites
+            </h2>
+            <p class="text-gray-500 text-sm">Books you have bookmarked.</p>
+          </div>
+
+          <div
+            id="favorites-grid"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            <!-- Favorites injected by JS -->
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="../js/navbar.js"></script>
+    <script src="../js/footer.js"></script>
+    <script type="module" src="../js/dashboard.js"></script>
+
+    <script>
+      renderNavbar("navbar-container", "");
+      renderFooter("footer-container");
+
+      // Tab Switcher Logic
+      window.switchTab = (tabName) => {
+        document
+          .querySelectorAll("main > div > section")
+          .forEach((el) => el.classList.add("hidden"));
+        document.getElementById(`tab-${tabName}`).classList.remove("hidden");
+
+        // Reset Sidebar Buttons
+        document.querySelectorAll("aside nav button").forEach((btn) => {
+          btn.className =
+            "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700";
+        });
+        // Active Button
+        document.getElementById(`tab-btn-${tabName}`).className =
+          "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors bg-primary text-white shadow-md";
+
+        // Trigger data reload for that tab
+        // This event is caught in dashboard.js
+        const event = new CustomEvent("tab-changed", { detail: tabName });
+        document.dispatchEvent(event);
+      };
+    </script>
+  </body>
+</html>
